@@ -19,17 +19,6 @@ const CompanyAddressData = () => {
             console.log(err)
         };
     });
-    // useEffect(() => {
-    //     const getContract = async () => {
-    //         try {
-    //             const response = await ContractFinder.get(`/${contractId}`)
-    //         } catch (err) {
-    //             console.log(err)
-    //         }
-    //     };
-    //     getContract()
-    // }, [contractId, addressData]);
-
     return (
         <section className="grid my-8">
             <table className="bg-gray-700 table-fixed">
