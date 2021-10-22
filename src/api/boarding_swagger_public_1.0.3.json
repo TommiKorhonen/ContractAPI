@@ -1,0 +1,1270 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.3",
+    "title": "Visma Pay Boarding API",
+    "description": "After you receive a boarding ID from the API you can redirect the user to https://signup.vismapay.com/{id} to fill the application."
+  },
+  "host": "boarding.vismapay.com",
+  "basePath": "/boardings",
+  "tags": [
+    {
+      "name": "boarding",
+      "description": "Boarding API endpoints for the form."
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": [
+          "boarding"
+        ],
+        "summary": "Create a new boarding process and optionally prefill the form data.",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "createboardingmodel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/createboardingmodel"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Boarding created succesfully.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The Boarding ID."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Some fields in formData might be invalid.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "validationErrorMessages": {
+                  "type": "array",
+                  "description": "Array of errors.",
+                  "example": [
+                    {
+                      "field": ".vatNumber",
+                      "error": "Invalid format"
+                    },
+                    {
+                      "field": ".formData.companyName",
+                      "error": "Invalid format"
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "description": "Path of the field in input."
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "Error message."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get an existing boarding process.",
+        "tags": [
+          "boarding"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Boarding ID",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boarding data of the boarding process. If the `boardingStatus` of the boarding model is not `pending` then only the `boardingStatus` field is returned.",
+            "schema": {
+              "$ref": "#/definitions/responsemodel"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update boarding process data (replace).",
+        "tags": [
+          "boarding"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateboardingmodel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateboardingmodel"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Boarding ID",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boarding data of the boarding process. If the `boardingStatus` of the boarding model is not `pending` then only the `boardingStatus` field is returned.",
+            "schema": {
+              "$ref": "#/definitions/responsemodel"
+            }
+          },
+          "400": {
+            "description": "Bad request. Some fields in formData might be invalid.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "validationErrorMessages": {
+                  "type": "array",
+                  "description": "Array of errors.",
+                  "example": [
+                    {
+                      "field": ".lang",
+                      "error": "Invalid format"
+                    },
+                    {
+                      "field": ".formData.companyName",
+                      "error": "Invalid format"
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "description": "Path of the field in input."
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "Error message."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update boarding process data (update/append)",
+        "tags": [
+          "boarding"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Boarding ID",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateboardingmodel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateboardingmodel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boarding data of the boarding process. If the `boardingStatus` of the boarding model is not `pending` then only the `boardingStatus` field is returned.",
+            "schema": {
+              "$ref": "#/definitions/responsemodel"
+            }
+          },
+          "400": {
+            "description": "Bad request. Some fields in formData might be invalid.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "validationErrorMessages": {
+                  "type": "array",
+                  "description": "Array of errors.",
+                  "example": [
+                    {
+                      "field": ".lang",
+                      "error": "Invalid format"
+                    },
+                    {
+                      "field": ".formData.companyName",
+                      "error": "Invalid format"
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "description": "Path of the field in input."
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "Error message."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/sign": {
+      "post": {
+        "summary": "Initiate the signing process",
+        "tags": [
+          "boarding"
+        ],
+        "description": "Before calling this endpoint make sure that the following fields have been set by using the **PUT /{id}** or **PATCH /{id}** endpoints. Required fields:\n\r `companyName`\n\r `companyPhone`\n\r `companyAddressStreet`\n\r `companyPostal`\n\r `companyCity`\n\r `businessType`\n\r `marketingName`\n\r `websiteUrl`\n\r `supportEmail`\n\r `supportPhone`\n\r `estimatedTotalRevenue`\n\r `estimatedServiceRevenue`\n\r `averageServicePurchase`\n\r `mostExpensiveServicePurchase`\n\r `customerRepresenterFirstname`\n\r `customerRepresenterLastname`\n\r `customerRepresenterPhone`\n\r `customerRepresenterEmail`\n\r `bankIban`\n\r`bankOwner`\n\r `bankName`\n\r `realBeneficialOwners`\n\r `beneficialOwners`\n\r `signatories`\n\r\n\rAlso the the application should either include:\n\r `companyBillingPostal`\n\r `companyBillingCity`\n\r `companyBillingAddressStreet`\n\rOR\n\r `companyBillingEmail`\n\rOR\n\r `eInvoiceProcessor`\n\r `eInvoiceAddress`",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Boarding ID",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signing process started succesfully. Customer should receive a link to their email."
+          },
+          "400": {
+            "description": "Bad request. Some required data might be missing from formData.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "validationErrorMessages": {
+                  "type": "array",
+                  "description": "Array of errors.",
+                  "example": [
+                    {
+                      "field": ".formData.companyName",
+                      "error": "Field missing"
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "description": "Path of the field in input."
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "Error message."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Boarding item not found or status is invalid."
+          }
+        }
+      }
+    },
+    "/{id}/remind": {
+      "post": {
+        "summary": "Resend a signing email",
+        "tags": [
+          "boarding"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Boarding ID",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A reminder email was successfully sent"
+          },
+          "403": {
+            "description": "Boarding item is in a wrong state",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "An error message."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Boarding item not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "An error message."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "updateboardingmodel": {
+      "type": "object",
+      "properties": {
+        "formData": {
+          "type": "object",
+          "properties": {
+            "isGrossPayout": {
+              "type": "boolean"
+            },
+            "isPep": {
+              "type": "boolean"
+            },
+            "isRca": {
+              "type": "boolean"
+            },
+            "signatories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "companyBillingPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "eInvoiceProcessor": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "businessDescription": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "isAdditionalMerchantEmail": {
+              "type": "boolean"
+            },
+            "companyName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "supportPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "bankIban": {
+              "type": "string",
+              "pattern": "^([a-zA-Z]{2}[ ]?\\d{2})(?=(?:[ \\-]?[a-zA-Z\\d]){9,30}$)((?:[ \\-]?[a-zA-Z\\d]{3,5}){2,7})([ \\-]?[a-zA-Z\\d]{1,3})?$"
+            },
+            "bankName": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "marketingName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "bankOwner": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipPercentage": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "websiteUrlTest": {
+              "type": "string",
+              "format": "uri"
+            },
+            "companyBillingCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "customerRepresenterEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "websiteUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "customerRepresenterLastname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "additionalInfo": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "companyBillingEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "isGiftcardsOrMembership": {
+              "type": "boolean"
+            },
+            "isRefundV2": {
+              "type": "boolean"
+            },
+            "companyAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "channelId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "channelName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "averageServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "companyCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "companyPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipDuration": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "mostExpensiveServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "merchantEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "eInvoiceAddress": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "estimatedTotalRevenue": {
+              "type": "integer"
+            },
+            "additionalMerchantEmails": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "email"
+              }
+            },
+            "supportEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyBillingAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "estimatedServiceRevenue": {
+              "type": "integer"
+            },
+            "realBeneficialOwners": {
+              "type": "boolean"
+            },
+            "customerRepresenterPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "beneficialOwners": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "shareAmount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "businessType": {
+              "type": "integer"
+            },
+            "customerRepresenterFirstname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            }
+          }
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "fi",
+            "en"
+          ]
+        }
+      }
+    },
+    "createboardingmodel": {
+      "type": "object",
+      "required": [
+        "pricePackage",
+        "vatNumber"
+      ],
+      "properties": {
+        "pricePackage": {
+          "type": "string",
+          "pattern": "^([a-zA-Z\\d_-]+)$",
+          "description": "Possible values: `power` or `express`"
+        },
+        "formData": {
+          "type": "object",
+          "properties": {
+            "isGrossPayout": {
+              "type": "boolean"
+            },
+            "isPep": {
+              "type": "boolean"
+            },
+            "isRca": {
+              "type": "boolean"
+            },
+            "signatories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "companyBillingPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "eInvoiceProcessor": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "businessDescription": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "isAdditionalMerchantEmail": {
+              "type": "boolean"
+            },
+            "companyName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "supportPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "bankIban": {
+              "type": "string",
+              "pattern": "^([a-zA-Z]{2}[ ]?\\d{2})(?=(?:[ \\-]?[a-zA-Z\\d]){9,30}$)((?:[ \\-]?[a-zA-Z\\d]{3,5}){2,7})([ \\-]?[a-zA-Z\\d]{1,3})?$"
+            },
+            "bankName": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "marketingName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "bankOwner": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipPercentage": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "websiteUrlTest": {
+              "type": "string",
+              "format": "uri"
+            },
+            "companyBillingCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "customerRepresenterEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "websiteUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "customerRepresenterLastname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "additionalInfo": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "companyBillingEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "isGiftcardsOrMembership": {
+              "type": "boolean"
+            },
+            "isRefundV2": {
+              "type": "boolean"
+            },
+            "companyAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "channelId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "channelName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "averageServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "companyCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "companyPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipDuration": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "mostExpensiveServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "merchantEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "eInvoiceAddress": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "estimatedTotalRevenue": {
+              "type": "integer"
+            },
+            "additionalMerchantEmails": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "email"
+              }
+            },
+            "supportEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyBillingAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "estimatedServiceRevenue": {
+              "type": "integer"
+            },
+            "realBeneficialOwners": {
+              "type": "boolean"
+            },
+            "customerRepresenterPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "beneficialOwners": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "shareAmount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "businessType": {
+              "type": "integer"
+            },
+            "customerRepresenterFirstname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            }
+          }
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "fi",
+            "en"
+          ],
+          "default": "fi"
+        },
+        "vatNumber": {
+          "type": "string",
+          "pattern": "^((FI){0,1}\\d{8}|\\d{7}\\-{0,1}\\d{1})$"
+        },
+        "partnerCode": {
+          "type": "string",
+          "pattern": "^([a-zA-Z\\d_-]+)$"
+        },
+        "partnerCallback": {
+          "description": "Partner that uses a payment channel can receive callbacks about updates of a boarding application. See callbackRequestModel for the fields sent in the callback.",
+          "type": "object",
+          "properties": {
+            "callbackSecret": {
+              "description": "Optional callback secret. When the secret has been provided then the callback will include an authCode -field.",
+              "type": "string",
+              "pattern": "^[a-zA-Z\\d]{0,64}$"
+            },
+            "statusUpdate": {
+              "description": "This callback is triggered whenever the boarding application's status changes.",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "URL where the callback should be sent. Only https -protocal and port 443 are allowed. The callback will be retried if the server doesn't respond with HTTP 200 ",
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        },
+        "options": {
+          "type": "object",
+          "properties": {
+            "fetchCompanyDetails": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "responsemodel": {
+      "description": "If the status of the boarding model is not pending then only the boardingStatus and lang fields are returned.",
+      "type": "object",
+      "properties": {
+        "lang": {
+          "type": "string",
+          "enum": [
+            "fi",
+            "en"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Boarding ID."
+        },
+        "boardingStatus": {
+          "type": "string",
+          "description": "Status of the boarding process.",
+          "enum": [
+            "pending",
+            "waitingForSignatures",
+            "signingError",
+            "signingCancelled",
+            "signed",
+            "completed",
+            "rejected"
+          ]
+        },
+        "pricePackage": {
+          "type": "string",
+          "description": "Price package code."
+        },
+        "vatNumber": {
+          "type": "string",
+          "description": "VAT number of the company being boarded.",
+          "pattern": "^((FI){0,1}\\d{8}|\\d{7}\\-{0,1}\\d{1})$"
+        },
+        "priceData": {
+          "type": "object",
+          "description": "Object containing prices of the selected price package.",
+          "properties": {
+            "paymentMethodPrices": {
+              "description": "These are the per transaction commissions.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Display name of the payment method."
+                  },
+                  "uid": {
+                    "type": "string",
+                    "description": "Unique code of the payment method."
+                  },
+                  "feeCents": {
+                    "type": "integer",
+                    "description": "Fixed fee per transaction. In cents."
+                  },
+                  "feeBasis": {
+                    "type": "integer",
+                    "description": "Percentage fee per transaction. Value in basis points (per ten thousand)."
+                  }
+                }
+              }
+            },
+            "additionalPrices": {
+              "description": "These are the prices of the possible additional features. Invoice monthly.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Display name of the additional feature."
+                  },
+                  "uid": {
+                    "type": "string",
+                    "description": "Unique code of the additional feature."
+                  },
+                  "feeCents": {
+                    "type": "integer",
+                    "description": "Fixed fee per month in cents."
+                  }
+                }
+              }
+            },
+            "monthlyFee": {
+              "type": "integer",
+              "description": "Monthly fee of the price category in cents."
+            },
+            "minMonthlyFee": {
+              "type": "integer",
+              "description": "Minimum monthly fee of the price category in cents. If the `monthlyFee` of the price category is `0` then a minimum monthly fee means the amount that will be invoices from the merchant in cases where the the monthly commission value does not exceed the minimum monthly fee."
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Date when the boarding process was created.",
+          "example": "2020-12-30 08:01:39"
+        },
+        "formData": {
+          "type": "object",
+          "properties": {
+            "isGrossPayout": {
+              "type": "boolean"
+            },
+            "isPep": {
+              "type": "boolean"
+            },
+            "isRca": {
+              "type": "boolean"
+            },
+            "signatories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "companyBillingPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "eInvoiceProcessor": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "businessDescription": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "isAdditionalMerchantEmail": {
+              "type": "boolean"
+            },
+            "companyName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "supportPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "bankIban": {
+              "type": "string",
+              "pattern": "^([a-zA-Z]{2}[ ]?\\d{2})(?=(?:[ \\-]?[a-zA-Z\\d]){9,30}$)((?:[ \\-]?[a-zA-Z\\d]{3,5}){2,7})([ \\-]?[a-zA-Z\\d]{1,3})?$"
+            },
+            "bankName": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "marketingName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "bankOwner": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipPercentage": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "websiteUrlTest": {
+              "type": "string",
+              "format": "uri"
+            },
+            "companyBillingCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "customerRepresenterEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "websiteUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "customerRepresenterLastname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "additionalInfo": {
+              "type": "string",
+              "pattern": "^[\\-'\\w\\s@&\\/\\\\()?!+£$€.,:*%\\u00C0-\\u0292\\u0400-\\u04FF]{1,500}$"
+            },
+            "companyBillingEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "isGiftcardsOrMembership": {
+              "type": "boolean"
+            },
+            "isRefundV2": {
+              "type": "boolean"
+            },
+            "companyAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "channelId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "channelName": {
+              "type": "string",
+              "pattern": "^[\\-'\\w@&\\/()?!+£$#€.,:*% \\u00C0-\\u0292\\u0400-\\u04FF]{1,100}$"
+            },
+            "averageServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "companyCity": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "companyPostal": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "giftcardsOrMembershipDuration": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "mostExpensiveServicePurchase": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "merchantEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "eInvoiceAddress": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            },
+            "estimatedTotalRevenue": {
+              "type": "integer"
+            },
+            "additionalMerchantEmails": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "email"
+              }
+            },
+            "supportEmail": {
+              "type": "string",
+              "format": "email"
+            },
+            "companyBillingAddressStreet": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF \\/,.'-]{1,100}$"
+            },
+            "estimatedServiceRevenue": {
+              "type": "integer"
+            },
+            "realBeneficialOwners": {
+              "type": "boolean"
+            },
+            "customerRepresenterPhone": {
+              "type": "string",
+              "pattern": "^([+]{0,1}[\\d\\(\\) -]){1,25}$"
+            },
+            "beneficialOwners": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "shareAmount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+                  }
+                }
+              }
+            },
+            "businessType": {
+              "type": "integer"
+            },
+            "customerRepresenterFirstname": {
+              "type": "string",
+              "pattern": "^[\\w\\u00C0-\\u0292\\u0400-\\u04FF ,.'-]{1,50}$"
+            }
+          }
+        }
+      }
+    },
+    "callbackRequestModel": {
+      "description": "Model of the callback that is sent to the URL defined in the partnerCallback -object when creating a new boarding application.",
+      "type": "object",
+      "required": [
+        "callbackTimestamp"
+      ],
+      "properties": {
+        "callbackTimestamp": {
+          "description": "Unix timestamp of the change that triggered the callback.",
+          "type": "integer",
+          "example": 1616416278
+        },
+        "boardingItem": {
+          "required": [
+            "id",
+            "boardingStatus",
+            "merchantCreated"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Boarding ID"
+            },
+            "merchantCreated": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Value 1 means that a merchant account was automatically created and the response's boardingItem will include channelId and subMerchantId. It is possible that account creation fails for example if the merchant that is being boarded already has an active account. In case the boardingStatus is updated to completed and merchantCreated is 0 the partner should manually check the submerchatId of the boarded merchant."
+            },
+            "boardingStatus": {
+              "type": "string",
+              "description": "Status of the boarding application.",
+              "enum": [
+                "pending",
+                "waitingForSignatures",
+                "signingError",
+                "signingCancelled",
+                "signed",
+                "completed",
+                "rejected"
+              ]
+            },
+            "channelId": {
+              "description": "ID of the channel that the merchant was added to. Returned if boardingStatus was updated to completed and a merchant account was automatically created (merchantCreated 1).",
+              "type": "integer"
+            },
+            "subMerchantId": {
+              "description": "ID of the submerchant that was attached to the channel defined by channelId. Returned if boardingStatus was updated to completed and a merchant account was automatically created (merchantCreated 1). Channel merchants need this value for their channel integration.",
+              "type": "integer"
+            },
+            "authCode": {
+              "type": "string",
+              "example": "EAA7270541C81D4C6B40822D04FCBD83F6FC23073CB3D8C127571A2947993A63",
+              "description": "Authcode calculated by using the callbackSecret that was defined in the partnerCallback -object when creating a new boarding application. It is calculated using HMAC-SHA256. HMAC implementations exist for most popular programming languages.\n\ncallbackSecret is used as the secret key and the message is calculated from the values of the following fields of the returned boardingItem -object:\n  `id`\n  `boardingStatus`\n  `merchantCreated`\n  `channelId` (IF SET)\n  `subMerchantId` (IF SET)\n  \nFields are joined with '|' character and they are appended in the specified order. The authcode must always be in UPPERCASE.\n\nExamples: \nBoarding application was started with a callbackSecret `callback-secret-1` and callback was sent with a boarding application id `id123123`, merchantCreated `0` and boarding status `waitingForSignatures` then the authCode would be calculated from `id123123|waitingForSignatures|0` and would be `B0EA8B521FC5ED57E6CEF598EAC1BD97B742A44878FEFE44B7F2686A4FAF54F1`.\n\nBoarding application was started with a callbackSecret `callback-secret-1` and callback was sent with a boarding application id `id123123`, merchantCreated `1` and boarding status `completed` AND the callback also includes channelId `456` subMerchantId `123` then the authCode would be calculated from `id123123|completed|1|456|123` and would be `FFC91CE97C06907C44342FD56F8139CC315A33B96FFCF3454EC34E0F35A26FFC`."
+            }
+          }
+        }
+      }
+    }
+  }
+}
