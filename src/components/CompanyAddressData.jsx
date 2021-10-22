@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import ContractFinder from '../api/ContractFinder'
 import { ContractContext } from '../context/ContractContext'
 
 const CompanyAddressData = () => {
-    const { setValues, contractId, addressData, formData, setFormData } = useContext(ContractContext);
+    const { setValues, contractId, addressData, setFormData } = useContext(ContractContext);
     const selectData = (async (id) => {
         try {
             const response = await ContractFinder.get(`/${id}`)

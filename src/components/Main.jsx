@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { ContractContext } from '../context/ContractContext'
-import CompanyAddressData from './CompanyAddressData'
 import ContractSign from './ContractSign'
 import CreateContract from './CreateContract'
 import UpdateBusinessData from './UpdateBusinessData'
